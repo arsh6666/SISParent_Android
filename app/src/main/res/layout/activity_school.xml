@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_white_smoke"
+        android:orientation="vertical">
+
+        <include layout="@layout/custom_title_toolbar"
+            android:id="@+id/customToolbar"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:gravity="center|top"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@mipmap/school_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="Enter School Name"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="22sp"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/schoolTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/grey_border_white_background"
+                    android:gravity="start|center"
+                    android:layout_marginTop="20dp"
+                    android:hint="Select school name"
+                    android:padding="10dp"
+                    android:maxLines="1"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/textColorSecondary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/branchTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/grey_border_white_background"
+                    android:gravity="start|center"
+                    android:hint="Select Branch"
+                    android:padding="10dp"
+                    android:maxLines="1"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/textColorSecondary"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/getStartButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/gredient_button"
+                    android:gravity="center"
+                    android:text="Get Started"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp">
+
+
+                </Button>
+
+            </LinearLayout>
+        </ScrollView>
+
+
+
+    </LinearLayout>
+</layout>

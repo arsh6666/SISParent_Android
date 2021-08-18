@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rootLayout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="10dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView"
+                android:layout_width="60dp"
+                android:visibility="gone"
+                android:layout_height="60dp"
+                android:src="@mipmap/logo"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/titleTv"
+                        android:layout_toLeftOf="@+id/ivMore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:text=""
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:singleLine="true"
+                        android:textColor="@color/colorBlack"/>
+
+                    <ImageView
+                        android:id="@+id/ivMore"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_right_black"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/descTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center|start"
+                    android:alpha=".7"
+                    android:visibility="gone"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    android:textColor="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/dateTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center|start"
+                    android:alpha=".7"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text=""
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:textColor="@android:color/darker_gray"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

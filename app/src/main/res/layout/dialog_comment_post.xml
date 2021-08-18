@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/rounded_white_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/headerComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Reply To Teacher"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/etComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="300dp"
+                android:padding="16dp"
+                android:hint="Write a comment"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp"
+                android:inputType="textImeMultiLine"
+                android:background="@drawable/grey_border_white_background"
+                android:gravity="top"/>
+            <Button
+                android:id="@+id/btn_Post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:background="@drawable/green_background_button"
+                android:text="Comment"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+</layout>

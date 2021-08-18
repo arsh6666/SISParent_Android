@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/borderLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/rightLayout"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/dot" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/dash_line2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rightLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:layout_toEndOf="@+id/borderLayout"
+            android:gravity="center_vertical|top"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/keyTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Student Code"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/valueTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="-"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>

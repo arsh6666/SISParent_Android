@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "158238459199",
+    "firebase_url": "https://thepalacenursery-dt.firebaseio.com",
+    "project_id": "thepalacenursery-dt",
+    "storage_bucket": "thepalacenursery-dt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158238459199:android:e91687efd272df311fbf8a",
+        "android_client_info": {
+          "package_name": "com.dt.thepalacenursery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158238459199-e2bel1b4n1stpio3koe34me1gieqe8r7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJTOH-WW2DFnHu2JbRduq7UQQ33yGSWyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158238459199-e2bel1b4n1stpio3koe34me1gieqe8r7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "158238459199-j0r1defdv8uur9cfv5u8d8lbu75qmscu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dt.thepalacenursery",
+                "app_store_id": "1478747584"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

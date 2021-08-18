@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:background="@drawable/rounded_white_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/headerTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Select Tenant"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            android:gravity="center"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_Tenants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="300dp"
+            android:maxHeight="300dp"
+            android:background="@drawable/grey_border_white_background"
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_Cancel"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/gredient_button"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_Select"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/gredient_button"
+                android:text="Select"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
+</layout>

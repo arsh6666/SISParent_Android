@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">SisParent</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="menu_comments">Comments</string>
+    <string name="menu_guardian">Guardian</string>
+    <string name="menu_my_notification">My Notification</string>
+
+    <string name="something_went_wrong_title">Something went wrong !</string>
+    <string name="something_went_wrong_msg"> There\'s a problem. Please Try again.</string>
+    <string name="no_connection">No internet connection!</string>
+    <string name="no_connection_message">No internet connection!, Please turn on your internet connection and try again.</string>
+    <string name="error">Error!</string>
+    <string name="error_message">Response Failed!, try again</string>
+    <string name="session_expired">Session Timeout !</string>
+    <string name="session_expired_message">Session has been expired, please login again.</string>
+    <string name="menu_chat">Chat</string>
+    <string name="action_post">POST</string>
+    <string name="default_notification_channel_id">@string/app_name</string>
+    <string name="default_notification_channel_name">ANDROID</string>
+
+</resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "295093717877",
+    "firebase_url": "https://kidspalacenursery-dt.firebaseio.com",
+    "project_id": "kidspalacenursery-dt",
+    "storage_bucket": "kidspalacenursery-dt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295093717877:android:4968eae83a49ed56ba213c",
+        "android_client_info": {
+          "package_name": "com.dt.kidspalacenursery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295093717877-mjsvpn69a5njjva93v7d4qkjpv359mgu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmLS2e5C6SSwrdgYzkBnUwdk6VEfNzZdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295093717877-mjsvpn69a5njjva93v7d4qkjpv359mgu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
