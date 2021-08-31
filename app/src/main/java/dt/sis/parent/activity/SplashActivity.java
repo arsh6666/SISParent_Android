@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding binding;
     Context mContext;
     SessionManager sessionManager;
-    String branchId ;
+    String branchId;
     String tenantId;
     final static int REQUEST_SCHOOL = 1;
 
@@ -51,18 +51,18 @@ public class SplashActivity extends AppCompatActivity {
         sessionManager = new SessionManager(mContext);
         branchId = sessionManager.getOrganizationId();
         tenantId = sessionManager.getTenantId();
-        if(BuildConfig.FLAVOR == AppUtils.SIS_MAIN){
+        if (BuildConfig.FLAVOR == AppUtils.SIS_MAIN) {
             if (tenantId.isEmpty() || branchId.isEmpty()) {
                 startActivityForResult(new Intent(mContext, SchoolActivity.class), REQUEST_SCHOOL);
-            }else{
+            } else {
                 getAppConfig();
             }
-        }else{
+        } else {
             if (tenantId.isEmpty() || branchId.isEmpty()) {
                 switch (BuildConfig.FLAVOR) {
                     case AppUtils.KIDS_PALACE:
                         branchId = "1";
-                        tenantId = BuildConfig.DEBUG ? "8" : "8";
+                        tenantId = BuildConfig.DEBUG ? "10" : "8";
                         break;
                     case AppUtils.THE_PALACE:
                         branchId = "1";
@@ -77,6 +77,7 @@ public class SplashActivity extends AppCompatActivity {
             getAppConfig();
         }
     }
+
     private void getAppConfig() {
         Call<JsonObject> call;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
@@ -84,20 +85,20 @@ public class SplashActivity extends AppCompatActivity {
 
         call = webApis.geEnableAppFeatures();
         new ApiServices(mContext).callWebServices(call, response -> {
-            try{
-                FeaturesModel modelVal = new Gson().fromJson(response,FeaturesModel.class);
-                if(modelVal.getResult()!=null) {
+            try {
+                FeaturesModel modelVal = new Gson().fromJson(response, FeaturesModel.class);
+                if (modelVal.getResult() != null) {
                     boolean status = modelVal.getSuccess();
                     if (status) {
                         FeaturesModel.Values values = modelVal.getResult().getSetting().getValues();
-                        Log.e("values",new Gson().toJson(values));
+                        Log.e("values", new Gson().toJson(values));
                         String validation = values.getMobileParentAppValidation();
                         String version = values.getMobileAndroidParentAppVersion();
-                        validation = validation!=null ? validation :"";
-                        version = version!=null ? version:"";
+                        validation = validation != null ? validation : "";
+                        version = version != null ? version : "";
                         String currentVersion = String.valueOf(BuildConfig.VERSION_CODE);
                         Log.e("versionCode", version + " ");
-                        if(validation.equalsIgnoreCase("true") && !version.equalsIgnoreCase(currentVersion)){
+                        if (validation.equalsIgnoreCase("true") && !version.equalsIgnoreCase(currentVersion)) {
                             sessionManager.clearCacheData();
                             UpdateAppDialog updateAppDialog = new UpdateAppDialog(mContext, new UpdateAppDialog.UpdateOnClickListnere() {
                                 @Override
@@ -106,18 +107,18 @@ public class SplashActivity extends AppCompatActivity {
                                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID));
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     mContext.startActivity(intent);
-                                    ((Activity)mContext).finish();
+                                    ((Activity) mContext).finish();
                                 }
 
                             });
                             updateAppDialog.showAlert();
-                        }else {
+                        } else {
                             doFurther();
                         }
                     }
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -137,7 +138,8 @@ public class SplashActivity extends AppCompatActivity {
                     getAppConfig();
                 }
                 break;
-            default: finish();
+            default:
+                finish();
                 break;
         }
     }
@@ -145,8 +147,8 @@ public class SplashActivity extends AppCompatActivity {
     private void doFurther() {
         branchId = sessionManager.getOrganizationId();
         tenantId = sessionManager.getTenantId();
-        Log.e("branchId",branchId+" ");
-        Log.e("tenantId",tenantId+" ");
+        Log.e("branchId", branchId + " ");
+        Log.e("tenantId", tenantId + " ");
         if (!branchId.isEmpty() && (!tenantId.isEmpty())) {
             if (sessionManager.getToken().isEmpty()) {
                 Intent intent = new Intent(mContext, LoginActivity.class);

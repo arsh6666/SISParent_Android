@@ -84,8 +84,6 @@ public class ChildProfileActivity extends AppCompatActivity {
 
             binding.customToolbar.ivDownload.setOnClickListener(v -> {
                 Constants.galleryFragment.checkPermission();
-
-
             });
             binding.customToolbar.ivAdd.setOnClickListener(v -> {
                 addCommentPopup();

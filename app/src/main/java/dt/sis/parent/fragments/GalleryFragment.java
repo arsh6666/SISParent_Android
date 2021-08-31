@@ -172,12 +172,10 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
     private void downloadAllImagesVideos() {
         tvDownloadAll.setEnabled(false);
         if (arrayList != null && arrayList.size() > 0) {
-            if (arrayList.size() > 20) {
-                for (int i = 0; i < 20; i++) {
-                    File myFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.app_name) + "/" + arrayList.get(i).getFileName());
-                    if (!myFile.exists())
-                        downloadFile(getMediaUrl(arrayList.get(i).getMediaId()), arrayList.get(i).getFileName(), this, i);
-                }
+            for (int i = 0; i < arrayList.size(); i++) {
+                File myFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.app_name) + "/" + arrayList.get(i).getFileName());
+                if (!myFile.exists())
+                    downloadFile(getMediaUrl(arrayList.get(i).getMediaId()), arrayList.get(i).getFileName(), this, i);
             }
         }
     }
@@ -258,8 +256,8 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
         protected List<GalleryDateGroupModel> doInBackground(Void... params) {
             try {
                 List<GalleryDateGroupModel> dateGroupList = new ArrayList<>();
-                if (arrayList.size() > 20) {
-                    for (int i = 0; i < 20; i++) {
+                if (arrayList.size() > 0) {
+                    for (int i = 0; i < arrayList.size(); i++) {
                         GalleryGroupModel.Result o1 = arrayList.get(i);
                         String uniqueDate = AppUtils.getDate(o1.getMediaDate());
                         List<GalleryDateGroupModel.Result> childList = new ArrayList<>();

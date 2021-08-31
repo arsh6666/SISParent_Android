@@ -19,7 +19,7 @@ import dt.sis.parent.helper.SessionManager;
 import dt.sis.parent.models.GalleryDateGroupModel;
 
 public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Adapter {
-    private List<T> tItemList;
+    private List<T> tItemList = new ArrayList<>();
     Context mContext;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
@@ -42,6 +42,11 @@ public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Ad
         tItemList = new ArrayList<>();
         tItemList.addAll(updateList);
         notifyDataSetChanged();
+    }
+
+    public void updateList(List<T> tItemList){
+        this.tItemList.addAll(tItemList);
+        notifyItemInserted(tItemList.size()-1);
     }
 
 
