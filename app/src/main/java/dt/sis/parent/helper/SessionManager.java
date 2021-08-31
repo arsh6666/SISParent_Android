@@ -383,11 +383,6 @@ public class SessionManager {
     }
 
     public AlertDialog getProgressAlert(){
-//        ProgressDialog dialog = new ProgressDialog(context);
-//        dialog.setMessage("Please wait...");
-//        dialog.setCancelable(true);
-//
-
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -399,11 +394,7 @@ public class SessionManager {
         if(dialog.getWindow()!=null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
-//        ((Activity)mContext).requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        ((Activity)mContext).getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
         return dialog;
-
     }
 
     public void createMessageAlertDialog(String title, String message){

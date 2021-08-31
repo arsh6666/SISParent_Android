@@ -42,51 +42,51 @@ public class ApiServices {
     }
 
     public void setDisplayDialog(boolean displayDialog) {
-       this.isDisplayDialog = displayDialog;
+        this.isDisplayDialog = displayDialog;
     }
 
     public void callWebServices(Call<JsonObject> call, final ServiceCallBack serviceCallBack) {
-        if(isDisplayDialog) {
+        if (isDisplayDialog) {
             progressDialog = myUtility.getProgressAlert();
-        }else{
+        } else {
             progressDialog = null;
         }
 
         SessionManager.displayURL(call);
-        activity =  mContext instanceof Activity ? ((Activity) mContext) : null;
+        activity = mContext instanceof Activity ? ((Activity) mContext) : null;
 
-        if(new NetworkConnection(mContext).isConnected()){
-            if(activity!=null && !activity.isFinishing() && progressDialog!=null)
+        if (new NetworkConnection(mContext).isConnected()) {
+            if (activity != null && !activity.isFinishing() && progressDialog != null)
                 progressDialog.show();
 
             call.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                    try{
-                        if(activity!=null && !activity.isFinishing() && progressDialog!=null)
+                    try {
+                        if (activity != null && !activity.isFinishing() && progressDialog != null)
                             progressDialog.dismiss();
                         long rT = response.raw().receivedResponseAtMillis();
                         long sT = response.raw().sentRequestAtMillis();
                         Log.e("RESPONSE", response.toString());
-                        Log.e("RESPONSE_HEADER",response.raw().headers().toString());
-                        Log.e("RESPONSE_TIME", String.valueOf(rT-sT));
-                        SessionManager.largeLog("RESPONSE_RESULT",response.body()!=null ?response.body().toString():"");
+                        Log.e("RESPONSE_HEADER", response.raw().headers().toString());
+                        Log.e("RESPONSE_TIME", String.valueOf(rT - sT));
+                        SessionManager.largeLog("RESPONSE_RESULT", response.body() != null ? response.body().toString() : "");
 
-                         if (response.isSuccessful() && response.code()==200 && response.body()!=null) {
-                            String returnData ="";
-                             returnData = response.body().toString();
-                             serviceCallBack.success(returnData);
-                         }else {
-                             APIError error = ErrorUtils.parseError(mContext,response);
-                             // … and use it to show error information
-                             // … or just log the issue like we’re doing :)
-                             if(!error.getSuccess()) {
-                                 String titleVal = "Oops !";
-                                 String messageVal = error.getError().getMessage()!=null ? error.getError().getMessage() : "";
-                                 myUtility.createMessageAlertDialog(titleVal, messageVal);
-                             }
-                         }
-                    }catch (Exception e){
+                        if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
+                            String returnData = "";
+                            returnData = response.body().toString();
+                            serviceCallBack.success(returnData);
+                        } else {
+                            APIError error = ErrorUtils.parseError(mContext, response);
+                            // … and use it to show error information
+                            // … or just log the issue like we’re doing :)
+                            if (!error.getSuccess()) {
+                                String titleVal = "Oops !";
+                                String messageVal = error.getError().getMessage() != null ? error.getError().getMessage() : "";
+                                myUtility.createMessageAlertDialog(titleVal, messageVal);
+                            }
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -95,7 +95,7 @@ public class ApiServices {
                 @Override
                 public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
-                    if(activity!=null && !activity.isFinishing() && progressDialog!=null)
+                    if (activity != null && !activity.isFinishing() && progressDialog != null)
                         progressDialog.dismiss();
                     String titleVal = mContext.getString(R.string.error);
                     String messageVal = mContext.getString(R.string.error_message);
@@ -105,7 +105,7 @@ public class ApiServices {
                 }
             });
 
-        }else{
+        } else {
             String titleVal = mContext.getString(R.string.no_connection);
             String messageVal = mContext.getString(R.string.no_connection_message);
             myUtility.createMessageAlertDialog(titleVal, messageVal);
@@ -114,33 +114,33 @@ public class ApiServices {
     }
 
     public void downloadFileServices(Call<ResponseBody> call, final ServiceCallBack serviceCallBack) {
-        if(isDisplayDialog) {
+        if (isDisplayDialog) {
             progressDialog = myUtility.getProgressAlert();
-        }else{
+        } else {
             progressDialog = null;
         }
         SessionManager.displayResonoseBody(call);
-        activity =  mContext instanceof Activity ? ((Activity) mContext) : null;
+        activity = mContext instanceof Activity ? ((Activity) mContext) : null;
 
-        if(new NetworkConnection(mContext).isConnected()){
-            if(activity!=null && !activity.isFinishing() && progressDialog!=null)
+        if (new NetworkConnection(mContext).isConnected()) {
+            if (activity != null && !activity.isFinishing() && progressDialog != null)
                 progressDialog.show();
 
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                    try{
-                        if(activity!=null && !activity.isFinishing() && progressDialog!=null)
+                    try {
+                        if (activity != null && !activity.isFinishing() && progressDialog != null)
                             progressDialog.dismiss();
                         long rT = response.raw().receivedResponseAtMillis();
                         long sT = response.raw().sentRequestAtMillis();
                         Log.e("RESPONSE", response.toString());
-                        Log.e("RESPONSE_HEADER",response.raw().headers().toString());
-                        Log.e("RESPONSE_TIME", String.valueOf(rT-sT));
-                        SessionManager.largeLog("RESPONSE_RESULT",response.body()!=null ?response.body().toString():"");
+                        Log.e("RESPONSE_HEADER", response.raw().headers().toString());
+                        Log.e("RESPONSE_TIME", String.valueOf(rT - sT));
+                        SessionManager.largeLog("RESPONSE_RESULT", response.body() != null ? response.body().toString() : "");
 
-                        if (response.isSuccessful() && response.code()==200 && response.body()!=null) {
-                            String returnData ="";
+                        if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
+                            String returnData = "";
                             returnData = response.body().toString();
                             serviceCallBack.success(returnData);
 
@@ -151,13 +151,12 @@ public class ApiServices {
 //                             seesionExpired(titleVal,messageVal);
 //
 
-                        }
-                        else {
-                            String titleVal = "Error: "+response.code();
+                        } else {
+                            String titleVal = "Error: " + response.code();
                             String messageVal = response.message();
                             myUtility.createMessageAlertDialog(titleVal, messageVal);
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -166,7 +165,7 @@ public class ApiServices {
                 @Override
                 public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
 
-                    if(activity!=null && !activity.isFinishing() && progressDialog!=null)
+                    if (activity != null && !activity.isFinishing() && progressDialog != null)
                         progressDialog.dismiss();
                     String titleVal = mContext.getString(R.string.error);
                     String messageVal = mContext.getString(R.string.error_message);
@@ -176,7 +175,7 @@ public class ApiServices {
                 }
             });
 
-        }else{
+        } else {
             String titleVal = mContext.getString(R.string.no_connection);
             String messageVal = mContext.getString(R.string.no_connection_message);
             myUtility.createMessageAlertDialog(titleVal, messageVal);
@@ -185,21 +184,21 @@ public class ApiServices {
     }
 
     private void seesionExpired(String title, String message) {
-        Activity activity=(Activity)mContext;
-        if(activity!=null && !activity.isFinishing()){
+        Activity activity = (Activity) mContext;
+        if (activity != null && !activity.isFinishing()) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-            if(title!=null && !title.isEmpty()){
+            if (title != null && !title.isEmpty()) {
                 // Initialize a new foreground color span instance
-                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext,R.color.colorPrimary));
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.colorPrimary));
                 // Initialize a new spannable string builder instance
                 SpannableStringBuilder ssBuilder = new SpannableStringBuilder(title);
 
-                ssBuilder.setSpan(foregroundColorSpan,0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ssBuilder.setSpan(foregroundColorSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 alertDialogBuilder.setTitle(ssBuilder);
 
             }
-            if(message!=null && !message.isEmpty()) {
+            if (message != null && !message.isEmpty()) {
                 alertDialogBuilder.setMessage(message);
             }
             alertDialogBuilder.setCancelable(true);

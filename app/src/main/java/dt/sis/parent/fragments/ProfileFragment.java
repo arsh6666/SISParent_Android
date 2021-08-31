@@ -55,26 +55,27 @@ public class ProfileFragment extends Fragment {
         View mView = binding.getRoot();
         mContext = getActivity();
         sessionManager = new SessionManager(mContext);
-        if(getArguments()!=null)
+        if (getArguments() != null)
             children_list = getArguments().getString("children_list");
 
-        if(children_list!=null) {
+        if (children_list != null) {
             Log.e("ChildrenList", children_list + " ");
-            DashboardChildrenModel.Students childrenModel = new Gson().fromJson(children_list, new TypeToken<DashboardChildrenModel.Students>(){}.getType());
-            String userName = childrenModel.getFirstname()+" "+childrenModel.getLastname();
+            DashboardChildrenModel.Students childrenModel = new Gson().fromJson(children_list, new TypeToken<DashboardChildrenModel.Students>() {
+            }.getType());
+            String userName = childrenModel.getFirstname() + " " + childrenModel.getLastname();
             String className = childrenModel.getDivisionname();
             String sectionName = childrenModel.getSectionname();
             String nannyName = childrenModel.getNanny();
             String classTeacherName = childrenModel.getClassteacher();
             String assistName = childrenModel.getTeacherassitant();
-           int studentId = childrenModel.getId();
+            int studentId = childrenModel.getId();
             String studentCode = childrenModel.getStudentcode();
             int divisionId = childrenModel.getDivisionid();
             String dob = childrenModel.getDob();
             String picture = childrenModel.getProfilePictureId();
             String age = childrenModel.getAge();
             binding.etUsername.setText(userName);
-            binding.etClass.setText(className+ " Standard");
+            binding.etClass.setText(className + " Standard");
             binding.etSction.setText(sectionName);
             binding.etRollNo.setText(studentCode);
             String dateOfBirth = AppUtils.getDateFromUTC(dob);
@@ -88,21 +89,21 @@ public class ProfileFragment extends Fragment {
                     .error(R.mipmap.ic_round_user)
                     .into(binding.ivProfileimage);
 
-            setInfo(binding.studentCode.keyTv,binding.studentCode.valueTv,"Student Code",studentCode);
-            setInfo(binding.sectionCode.keyTv,binding.sectionCode.valueTv,"Section",sectionName);
-            setInfo(binding.classTeacher.keyTv,binding.classTeacher.valueTv,"Class Teacher",classTeacherName);
-            setInfo(binding.teacherAssist.keyTv,binding.teacherAssist.valueTv,"Teacher Assistant",assistName);
-            setInfo(binding.nanny.keyTv,binding.nanny.valueTv,"Nanny",nannyName);
+            setInfo(binding.studentCode.keyTv, binding.studentCode.valueTv, "Student Code", studentCode);
+            setInfo(binding.sectionCode.keyTv, binding.sectionCode.valueTv, "Section", sectionName);
+            setInfo(binding.classTeacher.keyTv, binding.classTeacher.valueTv, "Class Teacher", classTeacherName);
+            setInfo(binding.teacherAssist.keyTv, binding.teacherAssist.valueTv, "Teacher Assistant", assistName);
+            setInfo(binding.nanny.keyTv, binding.nanny.valueTv, "Nanny", nannyName);
         }
 //
 
         return mView;
     }
 
-    private void setInfo(TextView keyTv, TextView valueTv, String keyStrig ,String keyValue){
-        keyStrig = keyStrig!=null ? keyStrig : "";
+    private void setInfo(TextView keyTv, TextView valueTv, String keyStrig, String keyValue) {
+        keyStrig = keyStrig != null ? keyStrig : "";
         keyTv.setText(keyStrig);
-        keyValue = keyValue!=null ? keyValue : "-";
+        keyValue = keyValue != null ? keyValue : "-";
         valueTv.setText(keyValue);
     }
 }

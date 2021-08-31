@@ -85,4 +85,5 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
     implementation 'com.applandeo:material-calendar-view:1.5.0'
     implementation 'com.smartarmenia:dotnetcoresignalrclientjava:1.14'
+    implementation 'com.nabinbhandari.android:permissions:3.8' // runtime permission.
 }

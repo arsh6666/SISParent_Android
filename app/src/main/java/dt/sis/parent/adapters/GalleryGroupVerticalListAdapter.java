@@ -18,7 +18,7 @@ import dt.sis.parent.databinding.ItemGalleryVerticalListItemBinding;
 import dt.sis.parent.helper.SessionManager;
 import dt.sis.parent.models.GalleryDateGroupModel;
 
-public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Adapter{
+public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Adapter {
     private List<T> tItemList;
     Context mContext;
     private LayoutInflater mInflater;
@@ -26,6 +26,8 @@ public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Ad
 
     public interface ItemClickListener {
         void onItemClick(List<GalleryDateGroupModel.Result> galleryList, int position);
+
+        void downloadImagesDateWise(List<GalleryDateGroupModel.Result> galleryList, String date);
     }
 
     public GalleryGroupVerticalListAdapter(Context context, List<T> tItemList, ItemClickListener mClickListener) {
@@ -51,12 +53,12 @@ public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Ad
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mView ;
-        try{
-            mView =(View) mInflater.inflate(R.layout.item_gallery_vertical_list_item, parent, false);
+        View mView;
+        try {
+            mView = mInflater.inflate(R.layout.item_gallery_vertical_list_item, parent, false);
             return new DataViewHolder(mView);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -71,30 +73,26 @@ public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Ad
         public DataViewHolder(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(mClickListener!=null){
-//                        mClickListener.onItemClick(v,getAdapterPosition());
-//                    }
-//                }
-//            });
-
         }
 
         public void setData(T item, final int pos) {
             try {
                 this.item = item;
-                String dateVal = getDate(pos,item);
-                final List<GalleryDateGroupModel.Result> galleryList = geGroupGallery(pos,item);
-                binding.dateTv.setText("Date: "+dateVal);
+                String dateVal = getDate(pos, item);
+                final List<GalleryDateGroupModel.Result> galleryList = geGroupGallery(pos, item);
+                binding.dateTv.setText("Date: " + dateVal);
+
+                binding.tvSave.setOnClickListener(v -> {
+                    if (mClickListener != null) {
+                        mClickListener.downloadImagesDateWise(galleryList, dateVal);
+                    }
+                });
 
                 GalleryGroupListAdapter groupListAdapter = new GalleryGroupListAdapter<GalleryDateGroupModel.Result>(mContext, galleryList, new GalleryGroupListAdapter.ItemClickListener() {
                     @Override
-                    public void onItemClick(View view , int position) {
-                        if(mClickListener!=null){
-                            mClickListener.onItemClick(galleryList,position);
+                    public void onItemClick(View view, int position) {
+                        if (mClickListener != null) {
+                            mClickListener.onItemClick(galleryList, position);
                         }
                     }
                 }) {
@@ -102,7 +100,7 @@ public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Ad
                     public String getMediaUrl(int position, GalleryDateGroupModel.Result result) {
                         String tenantId = new SessionManager(mContext).getTenantId();
 
-                        String value = SessionManager.GALLERY_FILE_URL+"?mediaid=" + result.getMediaId() +"&Tenantid="+tenantId;
+                        String value = SessionManager.GALLERY_FILE_URL + "?mediaid=" + result.getMediaId() + "&Tenantid=" + tenantId;
 
                         return value;
                     }
@@ -122,17 +120,13 @@ public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Ad
                 binding.recyclerView.setLayoutManager(mLayoutManager);
                 binding.recyclerView.setAdapter(groupListAdapter);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
 
         }
 
     }
-
-
-
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
@@ -140,13 +134,14 @@ public abstract class GalleryGroupVerticalListAdapter<T> extends RecyclerView.Ad
             final T tItem = tItemList.get(position);
 
             DataViewHolder dataViewHolder = (DataViewHolder) viewHolder;
-            dataViewHolder.setData(tItem,position);
+            dataViewHolder.setData(tItem, position);
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public abstract String getDate(int position, T t);
+
     protected abstract List<GalleryDateGroupModel.Result> geGroupGallery(int pos, T item);
 }

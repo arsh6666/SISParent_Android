@@ -1,5 +1,6 @@
 package dt.sis.parent.adapters;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
@@ -17,35 +18,42 @@ import dt.sis.parent.fragments.CommentsFragment;
 import dt.sis.parent.fragments.GalleryFragment;
 import dt.sis.parent.fragments.HealthFragment;
 import dt.sis.parent.fragments.ProfileFragment;
+import dt.sis.parent.support.Constants;
 
 public class ProfileTabAdapter extends FragmentPagerAdapter {
     List<String> tabTitles;
     String children_list;
+    Activity context;
 
-    public ProfileTabAdapter(FragmentManager fm, String children_list, List<String> tabTitles) {
-        super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+    public ProfileTabAdapter(FragmentManager fm, String children_list, List<String> tabTitles, Activity context) {
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.children_list = children_list;
         this.tabTitles = tabTitles;
+        this.context = context;
     }
+
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment= null;
+        Fragment fragment = null;
         try {
-            String titleName  = tabTitles.get(position);
+            String titleName = tabTitles.get(position);
 
-            switch (titleName){
+            switch (titleName) {
                 case ChildProfileActivity.PROFILE:
                     fragment = ProfileFragment.getInstance();
                     Bundle bundle = new Bundle();
-                    bundle.putString("children_list",children_list);
+                    bundle.putString("children_list", children_list);
                     fragment.setArguments(bundle);
                     return fragment;
 
                 case ChildProfileActivity.GALLLERY:
-                    fragment = GalleryFragment.getInstance();
+                    if (Constants.galleryFragment == null) {
+                        Constants.galleryFragment = GalleryFragment.getInstance();
+                        fragment = Constants.galleryFragment;
+                    } else fragment = Constants.galleryFragment;
                     bundle = new Bundle();
-                    bundle.putString("children_list",children_list);
+                    bundle.putString("children_list", children_list);
                     fragment.setArguments(bundle);
                     return fragment;
 
@@ -56,21 +64,21 @@ public class ProfileTabAdapter extends FragmentPagerAdapter {
                 case ChildProfileActivity.HEALTH:
                     fragment = HealthFragment.getInstance();
                     bundle = new Bundle();
-                    bundle.putString("children_list",children_list);
+                    bundle.putString("children_list", children_list);
                     fragment.setArguments(bundle);
                     return fragment;
 
                 case ChildProfileActivity.ATTENDANCE:
                     fragment = AttendanceFragment.getInstance();
                     bundle = new Bundle();
-                    bundle.putString("children_list",children_list);
+                    bundle.putString("children_list", children_list);
                     fragment.setArguments(bundle);
                     return fragment;
 
                 default:
                     return CommentsFragment.getInstance();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return fragment;
@@ -79,7 +87,7 @@ public class ProfileTabAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return  tabTitles.get(position);
+        return tabTitles.get(position);
     }
 
     @Override

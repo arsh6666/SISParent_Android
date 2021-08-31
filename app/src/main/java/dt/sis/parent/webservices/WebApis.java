@@ -29,6 +29,9 @@ import retrofit2.http.Url;
 
 public interface WebApis {
 
+    @POST("/api/services/app/Parent/SendCommentForStudent")
+    Call<JsonObject> sendCommentForStudent(@Body JsonObject jsonParams);
+
     @POST("api/TokenAuth/Authenticate")
     Call<JsonObject> loginAuthenticate(@Body JsonObject jsonParams);
 
@@ -136,9 +139,11 @@ public interface WebApis {
             @Query("tenantId") String tenantId,
             @Query("organizationId") String organizationId
     );
+
     @GET("api/services/app/Parent/GetGuardianTypes")
     Call<JsonObject> getGuardianTypes(
     );
+
     @POST("api/services/app/Parent/CreateOrUpdateGuardian")
     Call<JsonObject> createOrUpdateGuardian(@Body JsonObject jsonParams);
 
@@ -146,7 +151,7 @@ public interface WebApis {
     Call<JsonObject> updateGuardianPicture(@Body JsonObject jsonParams);
 
     @DELETE("api/services/app/Parent/DeleteGuardian")
-    Call<JsonObject> deleteGuardian( @Query("id") int id);
+    Call<JsonObject> deleteGuardian(@Query("id") int id);
 
     @GET("api/services/app/Account/GetTenants")
     Call<JsonObject> getSchoolTenants(

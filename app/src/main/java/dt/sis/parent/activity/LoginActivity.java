@@ -116,56 +116,52 @@ public class LoginActivity extends AppCompatActivity  {
         postParam.addProperty("password",password);
 
         call = webApis.loginAuthenticate(postParam);
-        new ApiServices(mContext).callWebServices(call,new ApiServices.ServiceCallBack() {
-            @Override
-            public void success(String  response) {
-                try{
-                    LoginModel modelVal = new Gson().fromJson(response,LoginModel.class);
-                    boolean status = modelVal.getSuccess();
-                    if(status) {
+        new ApiServices(mContext).callWebServices(call, response -> {
+            try{
+                LoginModel modelVal = new Gson().fromJson(response,LoginModel.class);
+                boolean status = modelVal.getSuccess();
+                if(status) {
 
-                        boolean resetPwd = modelVal.getResult().getShouldResetPassword();
-                        List<String> rolesArray = modelVal.getResult().getRoles();
+                    boolean resetPwd = modelVal.getResult().getShouldResetPassword();
+                    List<String> rolesArray = modelVal.getResult().getRoles();
 
-                        int user_id = modelVal.getResult().getUserId();
+                    int user_id = modelVal.getResult().getUserId();
 
-                        if(resetPwd){
-                            sessionManager.setTeacherCode(userName);
-                            sessionManager.setUserid(String.valueOf(user_id));
-                            String resetCode = modelVal.getResult().getPasswordResetCode();
+                    if(resetPwd){
+                        sessionManager.setTeacherCode(userName);
+                        sessionManager.setUserid(String.valueOf(user_id));
+                        String resetCode = modelVal.getResult().getPasswordResetCode();
 
-                            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-                            intent.putExtra("user_id", String.valueOf(user_id));
-                            intent.putExtra("reset_code", resetCode);
-                            startActivityForResult(intent,RESET_REQUEST);
-                        }else if(!rolesArray.contains("Parent")){
-                            sessionManager.createMessageAlertDialog("","Required permission are not assigned.");
-                        }else{
-                            String token = modelVal.getResult().getAccessToken();
-                            String encodedAccessToken = modelVal.getResult().getEncryptedEncodedAccessToken();
-                            String linkId = modelVal.getResult().getLinkId();
-                            String refreshToken = modelVal.getResult().getRefreshClientToken();
-                            String teacherCode = userName;
-                            sessionManager.setToken("Bearer "+token);
-                            sessionManager.setEncryptedEncodedAccessToken(encodedAccessToken);
-                            sessionManager.setTeacherCode(teacherCode);
-                            sessionManager.setUserid(String.valueOf(user_id));
-                            sessionManager.setLinkId(linkId);
-                            sessionManager.setRefreshToken(refreshToken);
-                            sessionManager.setEmail(userName);
+                        Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                        intent.putExtra("user_id", String.valueOf(user_id));
+                        intent.putExtra("reset_code", resetCode);
+                        startActivityForResult(intent,RESET_REQUEST);
+                    }else if(!rolesArray.contains("Parent")){
+                        sessionManager.createMessageAlertDialog("","Required permission are not assigned.");
+                    }else{
+                        String token = modelVal.getResult().getAccessToken();
+                        String encodedAccessToken = modelVal.getResult().getEncryptedEncodedAccessToken();
+                        String linkId = modelVal.getResult().getLinkId();
+                        String refreshToken = modelVal.getResult().getRefreshClientToken();
+                        String teacherCode = userName;
+                        sessionManager.setToken("Bearer "+token);
+                        sessionManager.setEncryptedEncodedAccessToken(encodedAccessToken);
+                        sessionManager.setTeacherCode(teacherCode);
+                        sessionManager.setUserid(String.valueOf(user_id));
+                        sessionManager.setLinkId(linkId);
+                        sessionManager.setRefreshToken(refreshToken);
+                        sessionManager.setEmail(userName);
 
-                            Intent intent = new Intent(mContext, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
 
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-            }
 
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
     }

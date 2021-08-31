@@ -90,7 +90,7 @@ public class DashboardFragment extends Fragment {
     List<NoticeboardModel.Result> noticeboardList;
     DashboardChildAdapter<DashboardChildrenModel.Students> childrenListAdapter;
     NoticeBoardAdapter<NoticeboardModel.Result> noticeboardListAdapter;
-    private String downloadFileName="";
+    private String downloadFileName = "";
 
     public static DashboardFragment getInstance() {
         return new DashboardFragment();
@@ -106,7 +106,6 @@ public class DashboardFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
     }
-
 
     @Nullable
     @Override
@@ -127,7 +126,7 @@ public class DashboardFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
-            switch (v.getId()){
+            switch (v.getId()) {
 
                 case R.id.btn_Edit:
                     startActivity(new Intent(mContext, EditProfileActivity.class));
@@ -141,65 +140,61 @@ public class DashboardFragment extends Fragment {
 
 
     private void refreshToken() {
-
-        String token = sessionManager.getToken().replace("Bearer","").trim();
+        String token = sessionManager.getToken().replace("Bearer", "").trim();
         String refreshToken = sessionManager.getRefreshToken();
         Call<JsonObject> call;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
         JsonObject postParam = new JsonObject();
-        postParam.addProperty("token",token);
-        postParam.addProperty("refreshToken",refreshToken);
+        postParam.addProperty("token", token);
+        postParam.addProperty("refreshToken", refreshToken);
 
         call = webApis.refreshToken(postParam);
         ApiServices apiServices = new ApiServices(mContext);
         apiServices.setDisplayDialog(true);
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
-            @Override
-            public void success(String  response) {
-                try{
-                    RefreshTokenModel modelVal = new Gson().fromJson(response,RefreshTokenModel.class);
-                    boolean status = modelVal.getSuccess();
-                    if(status) {
+        apiServices.callWebServices(call, response -> {
+            try {
+                RefreshTokenModel modelVal = new Gson().fromJson(response, RefreshTokenModel.class);
+                boolean status = modelVal.getSuccess();
+                if (status) {
 
-                        String token = modelVal.getResult().getToken();
-                        String refreshToken = modelVal.getResult().getRefreshToken();
-                        sessionManager.setToken("Bearer "+token);
-                        sessionManager.setRefreshToken(refreshToken);
-                        gotoProfileImage();
+                    String token1 = modelVal.getResult().getToken();
+                    String refreshToken1 = modelVal.getResult().getRefreshToken();
+                    sessionManager.setToken("Bearer " + token1);
+                    sessionManager.setRefreshToken(refreshToken1);
+                    gotoProfileImage();
 
 
-                    }
-
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-            }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
     }
-//
+
+    //
     private void gotoProfileImage() {
 
-        String token = sessionManager.getToken().replace("Bearer","").trim();
+        String token = sessionManager.getToken().replace("Bearer", "").trim();
         String refreshToken = sessionManager.getRefreshToken();
         Call<JsonObject> call;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
         JsonObject postParam = new JsonObject();
-        postParam.addProperty("token",token);
-        postParam.addProperty("refreshToken",refreshToken);
+        postParam.addProperty("token", token);
+        postParam.addProperty("refreshToken", refreshToken);
 
         call = webApis.getProfileImageApi();
         ApiServices apiServices = new ApiServices(mContext);
         apiServices.setDisplayDialog(true);
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
+        apiServices.callWebServices(call, new ApiServices.ServiceCallBack() {
             @Override
-            public void success(String  response) {
-                try{
+            public void success(String response) {
+                try {
 
                     ProfileImageModel modelVal = new Gson().fromJson(response, ProfileImageModel.class);
                     boolean status = modelVal.getSuccess();
-                    if(status) {
+                    if (status) {
 
                         String imagePath = modelVal.getResult().getProfilePicture();
 
@@ -230,7 +225,7 @@ public class DashboardFragment extends Fragment {
 
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -247,20 +242,20 @@ public class DashboardFragment extends Fragment {
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
         JsonObject postParam = new JsonObject();
 
-        call = webApis.getProfileForEdit(tenantId,organizationId);
+        call = webApis.getProfileForEdit(tenantId, organizationId);
 
         ApiServices apiServices = new ApiServices(mContext);
         apiServices.setDisplayDialog(true);
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
+        apiServices.callWebServices(call, new ApiServices.ServiceCallBack() {
             @Override
-            public void success(String  response) {
+            public void success(String response) {
                 try {
 
-                    ProfileModel modelVal = new Gson().fromJson(response,ProfileModel.class);
+                    ProfileModel modelVal = new Gson().fromJson(response, ProfileModel.class);
                     boolean status = modelVal.getSuccess();
-                    if(status) {
+                    if (status) {
 
-                        String name = modelVal.getResult().getName()+" "+ modelVal.getResult().getSurname();
+                        String name = modelVal.getResult().getName() + " " + modelVal.getResult().getSurname();
                         binding.tvName.setText(name);
                         String email = modelVal.getResult().getEmailAddress();
                         binding.tvMail.setText(email);
@@ -268,7 +263,7 @@ public class DashboardFragment extends Fragment {
                         getChildren();
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -285,97 +280,89 @@ public class DashboardFragment extends Fragment {
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
         JsonObject postParam = new JsonObject();
 
-        call = webApis.getChildren(tenantId,organizationId);
+        call = webApis.getChildren(tenantId, organizationId);
 
         ApiServices apiServices = new ApiServices(mContext);
         apiServices.setDisplayDialog(true);
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
-            @Override
-            public void success(String  response) {
-                try{
-                    DashboardChildrenModel modelVal = new Gson().fromJson(response,DashboardChildrenModel.class);
-                    boolean status = modelVal.getSuccess();
-                    if(status) {
+        apiServices.callWebServices(call, response -> {
+            try {
+                DashboardChildrenModel modelVal = new Gson().fromJson(response, DashboardChildrenModel.class);
+                boolean status = modelVal.getSuccess();
+                if (status) {
 
-                        if(modelVal.getResult()!=null){
+                    if (modelVal.getResult() != null) {
 
-                            childrenList= new ArrayList<>(modelVal.getResult().getStudents());
+                        childrenList = new ArrayList<>(modelVal.getResult().getStudents());
 
-                            if(childrenList.size()>0){
-                                binding.tvNoChild.setVisibility(View.GONE);
-                            }else{
-                                binding.tvNoChild.setVisibility(View.VISIBLE);
-                            }
-                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-                            mLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-                            mLayoutManager.setSmoothScrollbarEnabled(true);
-                            binding.listView.setLayoutManager(mLayoutManager);
-
-                            childrenListAdapter = new DashboardChildAdapter<DashboardChildrenModel.Students>(mContext,childrenList,new DashboardChildAdapter.ItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-
-                                    String children_list = new Gson().toJson(childrenList.get(position));
-
-                                    startActivity(new Intent(mContext, ChildProfileActivity.class)
-                                            .putExtra("children_list",children_list)
-                                    );
-
-                                }
-                            }) {
-                                @Override
-                                public String getPicture(int position, DashboardChildrenModel.Students students) {
-                                    String value = students.getProfilePictureId();
-                                    value = value!=null  ? value : "";
-                                    value = SessionManager.IMAGE_FILE_URL + "?pictureId=" + value + "&tenantId=" + sessionManager.getTenantId();
-                                    return value;
-                                }
-
-                                @Override
-                                public String getSection(int position, DashboardChildrenModel.Students students) {
-                                    String value = students.getSectionname();
-                                    value = value!=null  ? value : "";
-                                    return value;
-                                }
-
-                                @Override
-                                public String getName(int position, DashboardChildrenModel.Students students) {
-                                    String firstName = students.getFirstname();
-                                    firstName = firstName!=null ? firstName :"";
-                                    String lastName = students.getLastname();
-                                    lastName = lastName!=null ? lastName :"";
-                                    String value = firstName+" "+lastName;
-                                    return value;
-                                }
-
-                                @Override
-                                public String getGrade(int position, DashboardChildrenModel.Students students) {
-                                    String value = students.getSectionname();
-                                    value = value!=null ? value : "";
-                                    return value;
-                                }
-                            };
-                            binding.listView.setAdapter(childrenListAdapter);
+                        if (childrenList.size() > 0) {
+                            binding.tvNoChild.setVisibility(View.GONE);
+                        } else {
+                            binding.tvNoChild.setVisibility(View.VISIBLE);
                         }
+                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+                        mLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                        mLayoutManager.setSmoothScrollbarEnabled(true);
+                        binding.listView.setLayoutManager(mLayoutManager);
 
-                        getNoticeboard();
+                        childrenListAdapter = new DashboardChildAdapter<DashboardChildrenModel.Students>(mContext, childrenList, new DashboardChildAdapter.ItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                String children_list = new Gson().toJson(childrenList.get(position));
+                                startActivity(new Intent(mContext, ChildProfileActivity.class)
+                                        .putExtra("children_list", children_list));
+                            }
+                        }) {
+                            @Override
+                            public String getPicture(int position, DashboardChildrenModel.Students students) {
+                                String value = students.getProfilePictureId();
+                                value = value != null ? value : "";
+                                value = SessionManager.IMAGE_FILE_URL + "?pictureId=" + value + "&tenantId=" + sessionManager.getTenantId();
+                                return value;
+                            }
 
+                            @Override
+                            public String getSection(int position, DashboardChildrenModel.Students students) {
+                                String value = students.getSectionname();
+                                value = value != null ? value : "";
+                                return value;
+                            }
+
+                            @Override
+                            public String getName(int position, DashboardChildrenModel.Students students) {
+                                String firstName = students.getFirstname();
+                                firstName = firstName != null ? firstName : "";
+                                String lastName = students.getLastname();
+                                lastName = lastName != null ? lastName : "";
+                                String value = firstName + " " + lastName;
+                                return value;
+                            }
+
+                            @Override
+                            public String getGrade(int position, DashboardChildrenModel.Students students) {
+                                String value = students.getSectionname();
+                                value = value != null ? value : "";
+                                return value;
+                            }
+                        };
+                        binding.listView.setAdapter(childrenListAdapter);
                     }
 
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
+                    getNoticeboard();
 
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
     }
 
-    private void downloadManager(Uri uri,String fileName, String contentType){
-        try{
+    private void downloadManager(Uri uri, String fileName, String contentType) {
+        try {
             Toast.makeText(mContext, "Downloading has started...", Toast.LENGTH_SHORT).show();
             mContext.registerReceiver(attachmentDownloadCompleteReceive, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-            DownloadManager downloadManager = (DownloadManager)mContext.getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
             DownloadManager.Request request = new DownloadManager.Request(uri);
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
                     DownloadManager.Request.NETWORK_MOBILE);
@@ -387,15 +374,16 @@ public class DashboardFragment extends Fragment {
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
 //set the local destination for download file to a path within the application's external files directory
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,fileName);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
 
             request.setMimeType(contentType);
             downloadManager.enqueue(request);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     BroadcastReceiver attachmentDownloadCompleteReceive = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -407,6 +395,7 @@ public class DashboardFragment extends Fragment {
             }
         }
     };
+
     private void openDownloadedAttachment(final Context context, final long downloadId) {
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query();
@@ -422,12 +411,13 @@ public class DashboardFragment extends Fragment {
         }
         cursor.close();
     }
+
     private void openDownloadedAttachment(final Context context, Uri attachmentUri, final String attachmentMimeType) {
-        if(attachmentUri!=null) {
+        if (attachmentUri != null) {
             // Get Content Uri.
             if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme())) {
                 // FileUri - Convert it to contentUri.
-                if(attachmentUri.getPath()!=null) {
+                if (attachmentUri.getPath() != null) {
                     File file = new File(attachmentUri.getPath());
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         attachmentUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", file);
@@ -456,26 +446,26 @@ public class DashboardFragment extends Fragment {
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
         JsonObject postParam = new JsonObject();
 
-        call = webApis.getNoticeboard(tenantId,organizationId);
+        call = webApis.getNoticeboard(tenantId, organizationId);
 
         ApiServices apiServices = new ApiServices(mContext);
         apiServices.setDisplayDialog(false);
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
+        apiServices.callWebServices(call, new ApiServices.ServiceCallBack() {
             @Override
-            public void success(final String  response) {
-                try{
-                    NoticeboardModel modelVal = new Gson().fromJson(response,NoticeboardModel.class);
+            public void success(final String response) {
+                try {
+                    NoticeboardModel modelVal = new Gson().fromJson(response, NoticeboardModel.class);
                     boolean status = modelVal.getSuccess();
-                    if(status) {
+                    if (status) {
 
-                        if(modelVal.getResult()!=null){
+                        if (modelVal.getResult() != null) {
 
-                            noticeboardList= new ArrayList<>(modelVal.getResult());
+                            noticeboardList = new ArrayList<>(modelVal.getResult());
 
-                            if(noticeboardList.size()>0){
+                            if (noticeboardList.size() > 0) {
                                 binding.tvNoResultAvailable.setVisibility(View.GONE);
                                 binding.rvNoticBoard.setVisibility(View.VISIBLE);
-                            }else{
+                            } else {
                                 binding.tvNoResultAvailable.setVisibility(View.VISIBLE);
                                 binding.rvNoticBoard.setVisibility(View.GONE);
                             }
@@ -495,59 +485,59 @@ public class DashboardFragment extends Fragment {
                                     downloadFileName = noticeboardList.get(position).getFileId();
                                     String tempFileName = noticeboardList.get(position).getTempFileName();
                                     String contentType = noticeboardList.get(position).getContentType();
-                                    contentType = contentType!=null ? contentType : "";
-                                    tempFileName = tempFileName!=null ? tempFileName : "";
-                                    downloadFileName = downloadFileName!=null ? downloadFileName : "";
+                                    contentType = contentType != null ? contentType : "";
+                                    tempFileName = tempFileName != null ? tempFileName : "";
+                                    downloadFileName = downloadFileName != null ? downloadFileName : "";
                                     boolean isFileAvailable = noticeboardList.get(position).isFileAvailable();
-                                    if(isFileAvailable && !downloadFileName.isEmpty()){
+                                    if (isFileAvailable && !downloadFileName.isEmpty()) {
 //                                        String downloadFileURL = SessionManager.BASE_URL+"File/DownloadFile?"+"fileId="+downloadFileName+"&tenantId="+tenantId;
 
-                                        String downloadFileURL = SessionManager.BASE_URL+"NoticeBoard/"+tempFileName;
+                                        String downloadFileURL = SessionManager.BASE_URL + "NoticeBoard/" + tempFileName;
                                         try {
 //                                            Uri uri = Uri.parse(downloadFileURL);
 //                                            downloadManager(uri,tempFileName,contentType);
                                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadFileURL));
                                             startActivity(browserIntent);
-                                        }catch (Exception e){
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
 
-                                       // requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,  Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+                                        // requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,  Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
                                     }
                                 }
                             }) {
                                 @Override
                                 public String getEventDay(int position, NoticeboardModel.Result result) {
                                     String value = result.getEventdate();
-                                    value = value!=null  ? AppUtils.getDayFromUTC(value) : "";
+                                    value = value != null ? AppUtils.getDayFromUTC(value) : "";
                                     return value;
                                 }
 
                                 @Override
                                 public String getEventDate(int position, NoticeboardModel.Result result) {
                                     String value = result.getEventdate();
-                                    value = value!=null && !value.isEmpty() ? AppUtils.getDateFromUTC(value) : "";
+                                    value = value != null && !value.isEmpty() ? AppUtils.getDateFromUTC(value) : "";
                                     return value;
                                 }
 
                                 @Override
                                 public String getEventTime(int position, NoticeboardModel.Result result) {
                                     String value = result.getEventdate();
-                                    value = value!=null  ? AppUtils.getTimeFromUTC(value) : "";
+                                    value = value != null ? AppUtils.getTimeFromUTC(value) : "";
                                     return value;
                                 }
 
                                 @Override
                                 public String getEventName(int position, NoticeboardModel.Result result) {
                                     String value = result.getName();
-                                    value = value!=null  ? value : "";
+                                    value = value != null ? value : "";
                                     return value;
                                 }
 
                                 @Override
                                 public String getEventLocation(int position, NoticeboardModel.Result result) {
                                     String value = result.getLocationname();
-                                    value = value!=null  ? value : "";
+                                    value = value != null ? value : "";
                                     return value;
                                 }
 
@@ -560,7 +550,7 @@ public class DashboardFragment extends Fragment {
                         }
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -583,48 +573,48 @@ public class DashboardFragment extends Fragment {
     }
 
     public void downloadFileServices(String fileName) {
-       final  AlertDialog progressDialog = sessionManager.getProgressAlert();
+        final AlertDialog progressDialog = sessionManager.getProgressAlert();
         String tenantId = sessionManager.getTenantId();
         Call<ResponseBody> call;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
         JsonObject postParam = new JsonObject();
 
 
-        call = webApis.downloadFile(fileName,tenantId);
+        call = webApis.downloadFile(fileName, tenantId);
 //        call = webApis.downloadFileSample("http://www.africau.edu/images/default/sample.pdf");
         SessionManager.displayResonoseBody(call);
 
-        if(new NetworkConnection(mContext).isConnected()){
+        if (new NetworkConnection(mContext).isConnected()) {
             progressDialog.show();
 
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                    try{
+                    try {
 
                         progressDialog.dismiss();
                         long rT = response.raw().receivedResponseAtMillis();
                         long sT = response.raw().sentRequestAtMillis();
                         Log.e("RESPONSE", response.toString());
-                        Log.e("RESPONSE_HEADER",response.raw().headers().toString());
-                        Log.e("RESPONSE_TIME", String.valueOf(rT-sT));
-                        SessionManager.largeLog("RESPONSE_RESULT",response.body()!=null ?response.body().toString():"");
-                        String fileUrl  = call.request().url().toString();
+                        Log.e("RESPONSE_HEADER", response.raw().headers().toString());
+                        Log.e("RESPONSE_TIME", String.valueOf(rT - sT));
+                        SessionManager.largeLog("RESPONSE_RESULT", response.body() != null ? response.body().toString() : "");
+                        String fileUrl = call.request().url().toString();
 
-                        if (response.isSuccessful() && response.code()==200 && response.body()!=null) {
+                        if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
                             String fileName = response.headers().get("Content-Disposition");
                             Log.e("Content-Disposition", fileName + " ");
-                            if(fileName!=null) {
-                                fileName = fileName.substring(fileName.lastIndexOf("filename=")+9);
+                            if (fileName != null) {
+                                fileName = fileName.substring(fileName.lastIndexOf("filename=") + 9);
                                 Log.e("fileName", fileName + " ");
-                                new DownloadZipFileTask(fileName).execute(response.body());  }
-                        }
-                        else {
-                            String titleVal = "Error: "+response.code();
+                                new DownloadZipFileTask(fileName).execute(response.body());
+                            }
+                        } else {
+                            String titleVal = "Error: " + response.code();
                             String messageVal = response.message();
                             sessionManager.createMessageAlertDialog(titleVal, messageVal);
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -642,7 +632,7 @@ public class DashboardFragment extends Fragment {
                 }
             });
 
-        }else{
+        } else {
             String titleVal = mContext.getString(R.string.no_connection);
             String messageVal = mContext.getString(R.string.no_connection_message);
             sessionManager.createMessageAlertDialog(titleVal, messageVal);
@@ -670,47 +660,49 @@ public class DashboardFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(ResponseBody... urls) {
-             boolean writtenToDisk = writeResponseBodyToDisk(saveFilePath,urls[0]);
+            boolean writtenToDisk = writeResponseBodyToDisk(saveFilePath, urls[0]);
             return writtenToDisk;
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if(result){
+            if (result) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(saveFilePath.exists()){
+                        if (saveFilePath.exists()) {
                             progressDialog.dismiss();
-                            Toast.makeText(mContext, "File saved: "+saveFilePath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "File saved: " + saveFilePath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                             openFilePath(saveFilePath);
                         }
                     }
-                },2000);
+                }, 2000);
 
             }
 
         }
     }
 
-    public Uri getFileUri( File file) {
+    public Uri getFileUri(File file) {
         return FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", file);
     }
+
     public static String getMimeType(String filePathOrURL) { //file path or whatever suitable URL you want.
         String type = null;
         String extension = MimeTypeMap.getFileExtensionFromUrl(filePathOrURL);
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
-        Log.e("fileMimeType",type+" ");
+        Log.e("fileMimeType", type + " ");
         return type;
     }
+
     private void openFilePath(File file) {
         try {
             String fileName = file.getName();
-            String extenstion = fileName.substring(fileName.lastIndexOf(".")+1);
-            Log.d(TAG, "openFilePath: ."+extenstion);
-            String fileMimeType =getMimeType(file.getAbsolutePath());
+            String extenstion = fileName.substring(fileName.lastIndexOf(".") + 1);
+            Log.d(TAG, "openFilePath: ." + extenstion);
+            String fileMimeType = getMimeType(file.getAbsolutePath());
             Intent target = new Intent(Intent.ACTION_VIEW);
             target.setDataAndType(getFileUri(file), fileMimeType);
             target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -725,7 +717,7 @@ public class DashboardFragment extends Fragment {
     private void saveToDisk(ResponseBody body, String filename) {
         try {
 
-            File destinationFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "+Shashank1_"+ System.currentTimeMillis()+".pdf");
+            File destinationFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "+Shashank1_" + System.currentTimeMillis() + ".pdf");
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
@@ -761,6 +753,7 @@ public class DashboardFragment extends Fragment {
             return;
         }
     }
+
     private boolean writeResponseBodyToDisk(File futureStudioIconFile, ResponseBody body) {
         try {
 

@@ -40,6 +40,7 @@ import dt.sis.parent.helper.SessionManager;
 import dt.sis.parent.models.CommentsListModel;
 import dt.sis.parent.models.DashboardChildrenModel;
 import dt.sis.parent.models.PostCommentModel;
+import dt.sis.parent.support.Utils;
 import dt.sis.parent.webservices.ApiClient;
 import dt.sis.parent.webservices.ApiServices;
 import dt.sis.parent.webservices.WebApis;
@@ -92,67 +93,62 @@ public class CommentsFragment extends Fragment {
         postParam.addProperty("SectionId", sectionId);
         call = webApis.getParentsComments();
         ApiServices apiServices = new ApiServices(mContext);
+        apiServices.callWebServices(call, response -> {
+            try {
+                CommentsListModel modelVal = new Gson().fromJson(response, CommentsListModel.class);
+                if (modelVal.getResult() != null) {
+                    int totalCount = modelVal.getResult().size();
+                    if (totalCount > 0) {
 
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
-            @Override
-            public void success(String  response) {
-                try{
-                    CommentsListModel modelVal = new Gson().fromJson(response,CommentsListModel.class);
-                    if(modelVal.getResult()!=null) {
-                        int totalCount = modelVal.getResult().size();
-                        if(totalCount>0){
-
-                        }else{
-                            Toast.makeText(mContext, "Comments List is empty", Toast.LENGTH_SHORT).show();
-                        }
-                        commentsList= new ArrayList<>(modelVal.getResult());
-
-                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-                        mLayoutManager.setOrientation(RecyclerView.VERTICAL);
-                        mLayoutManager.setSmoothScrollbarEnabled(true);
-                        binding.rvCommentList.setLayoutManager(mLayoutManager);
-
-                        commentListAdapter = new CommentsListAdapter<CommentsListModel.Result>(mContext, commentsList, itemClickListener) {
-
-                            @Override
-                            public String getHeader(int position, CommentsListModel.Result result) {
-                                String value = result.getTeacherComment();
-                                value = (value!=null && !value.isEmpty()) ? value : "No Comments";
-                                return value;
-                            }
-
-                            @Override
-                            public String getContent(int position, CommentsListModel.Result result) {
-                                String value = result.getParentComment();
-                                value = (value != null && !value.isEmpty()) ? value : "No Comments";
-                                return value;
-                            }
-
-                            @Override
-                            public String getName(int position, CommentsListModel.Result result) {
-                                String value = result.getFirstName()+" "+ result.getLastName();
-                                value = value.replace("  "," ").trim();
-                                return value;
-                            }
-
-                            @Override
-                            public String getDate(int position, CommentsListModel.Result result) {
-                                String value = result.getCommentDate();
-                                value = (value!=null && !value.isEmpty()) ? getCalenderTime(value) : "";
-                                return value;
-                            }
-
-                        };
-
-                        binding.rvCommentList.setAdapter(commentListAdapter);
-
+                    } else {
+                        Toast.makeText(mContext, "Comments List is empty", Toast.LENGTH_SHORT).show();
                     }
+                    commentsList = new ArrayList<>(modelVal.getResult());
 
-                }catch (Exception e){
-                    e.printStackTrace();
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+                    mLayoutManager.setOrientation(RecyclerView.VERTICAL);
+                    mLayoutManager.setSmoothScrollbarEnabled(true);
+                    binding.rvCommentList.setLayoutManager(mLayoutManager);
+
+                    commentListAdapter = new CommentsListAdapter<CommentsListModel.Result>(mContext, commentsList, itemClickListener) {
+
+                        @Override
+                        public String getHeader(int position, CommentsListModel.Result result) {
+                            String value = result.getTeacherComment();
+                            value = (value != null && !value.isEmpty()) ? value : "No Comments";
+                            return value;
+                        }
+
+                        @Override
+                        public String getContent(int position, CommentsListModel.Result result) {
+                            String value = result.getParentComment();
+                            value = (value != null && !value.isEmpty()) ? value : "No Comments";
+                            return value;
+                        }
+
+                        @Override
+                        public String getName(int position, CommentsListModel.Result result) {
+                            String value = result.getFirstName() + " " + result.getLastName();
+                            value = value.replace("  ", " ").trim();
+                            return value;
+                        }
+
+                        @Override
+                        public String getDate(int position, CommentsListModel.Result result) {
+                            String value = result.getCommentDate();
+                            value = (value != null && !value.isEmpty()) ? getCalenderTime(value) : "";
+                            return value;
+                        }
+
+                    };
+
+                    binding.rvCommentList.setAdapter(commentListAdapter);
+
                 }
-            }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
     }
@@ -160,15 +156,15 @@ public class CommentsFragment extends Fragment {
     private CommentsListAdapter.ItemClickListener itemClickListener = new CommentsListAdapter.ItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            final  String id = commentsList.get(position).getId();
+            final String id = commentsList.get(position).getId();
             setParentReadComment(id);
 
-            String parentComment =  commentsList.get(position).getParentComment();
-            String teacherComment =  commentsList.get(position).getTeacherComment();
-            parentComment = parentComment!=null? parentComment : "";
-            teacherComment = teacherComment!=null? teacherComment : "";
+            String parentComment = commentsList.get(position).getParentComment();
+            String teacherComment = commentsList.get(position).getTeacherComment();
+            parentComment = parentComment != null ? parentComment : "";
+            teacherComment = teacherComment != null ? teacherComment : "";
 
-            parentsCommentsDialog = new ParentsCommentsDialog(mContext, parentComment, teacherComment,new ParentsCommentsDialog.ItemClickListener() {
+            parentsCommentsDialog = new ParentsCommentsDialog(mContext, parentComment, teacherComment, new ParentsCommentsDialog.ItemClickListener() {
                 @Override
                 public void onCancelItemClick(View view) {
                     parentsCommentsDialog.dismiss();
@@ -176,8 +172,12 @@ public class CommentsFragment extends Fragment {
 
                 @Override
                 public void onPosItemClick(String message) {
-                    if(!message.isEmpty()){
-                        postCommentApi(message,id);
+                    if (!message.isEmpty()) {
+                        if (Utils.isNetworkAvailable(mContext)) {
+                            Utils.hideKeyboard(getActivity());
+                            postCommentApi(message, id);
+                        } else
+                            Toast.makeText(mContext, "Internet required", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, "Please Enter comment", Toast.LENGTH_LONG).show();
                     }
@@ -190,20 +190,20 @@ public class CommentsFragment extends Fragment {
         }
     };
 
-    private  String getCalenderTime(String dateString){
+    private String getCalenderTime(String dateString) {
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
 
         SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         try {
             Date dateVal = input.parse(dateString.trim());         // parse input
-            return  output.format(dateVal);         // format output
+            return output.format(dateVal);         // format output
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
     }
 
-    private void  setParentReadComment( String commentId) {
+    private void setParentReadComment(String commentId) {
 
         Call<JsonObject> call;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
@@ -216,16 +216,16 @@ public class CommentsFragment extends Fragment {
         call = webApis.SetParentReadComment(postParam);
         ApiServices apiServices = new ApiServices(mContext);
         apiServices.setDisplayDialog(false);
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
+        apiServices.callWebServices(call, new ApiServices.ServiceCallBack() {
             @Override
-            public void success(String  response) {
-                try{
-                    PostCommentModel modelVal = new Gson().fromJson(response,PostCommentModel.class);
-                    if(modelVal.getSuccess()) {
+            public void success(String response) {
+                try {
+                    PostCommentModel modelVal = new Gson().fromJson(response, PostCommentModel.class);
+                    if (modelVal.getSuccess()) {
 
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -234,7 +234,7 @@ public class CommentsFragment extends Fragment {
 
     }
 
-    private void  postCommentApi(String postMessage, String id) {
+    private void postCommentApi(String postMessage, String id) {
 
         Call<JsonObject> call;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
@@ -246,19 +246,19 @@ public class CommentsFragment extends Fragment {
         call = webApis.ReplyToTeacherComment(postParam);
         ApiServices apiServices = new ApiServices(mContext);
 
-        apiServices.callWebServices(call,new ApiServices.ServiceCallBack() {
+        apiServices.callWebServices(call, new ApiServices.ServiceCallBack() {
             @Override
-            public void success(String  response) {
-                try{
-                    PostCommentModel modelVal = new Gson().fromJson(response,PostCommentModel.class);
-                    if(modelVal.getSuccess()) {
+            public void success(String response) {
+                try {
+                    PostCommentModel modelVal = new Gson().fromJson(response, PostCommentModel.class);
+                    if (modelVal.getSuccess()) {
                         Toast.makeText(mContext, "Comment posted successfully", Toast.LENGTH_SHORT).show();
 //                        if(postAlertDialog.isShowing()) postAlertDialog.dismiss();
-                        if(parentsCommentsDialog.isShowing()) parentsCommentsDialog.dismiss();
+                        if (parentsCommentsDialog.isShowing()) parentsCommentsDialog.dismiss();
                         getCommentList();
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

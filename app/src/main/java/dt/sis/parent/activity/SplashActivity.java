@@ -62,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
                 switch (BuildConfig.FLAVOR) {
                     case AppUtils.KIDS_PALACE:
                         branchId = "1";
-                        tenantId = BuildConfig.DEBUG ? "10" : "8";
+                        tenantId = BuildConfig.DEBUG ? "8" : "8";
                         break;
                     case AppUtils.THE_PALACE:
                         branchId = "1";
@@ -83,45 +83,42 @@ public class SplashActivity extends AppCompatActivity {
         JsonObject postParam = new JsonObject();
 
         call = webApis.geEnableAppFeatures();
-        new ApiServices(mContext).callWebServices(call,new ApiServices.ServiceCallBack() {
-            @Override
-            public void success(String  response) {
-                try{
-                    FeaturesModel modelVal = new Gson().fromJson(response,FeaturesModel.class);
-                    if(modelVal.getResult()!=null) {
-                        boolean status = modelVal.getSuccess();
-                        if (status) {
-                            FeaturesModel.Values values = modelVal.getResult().getSetting().getValues();
-                            Log.e("values",new Gson().toJson(values));
-                            String validation = values.getMobileParentAppValidation();
-                            String version = values.getMobileAndroidParentAppVersion();
-                            validation = validation!=null ? validation :"";
-                            version = version!=null ? version:"";
-                            String currentVersion = String.valueOf(BuildConfig.VERSION_CODE);
-                            Log.e("versionCode", version + " ");
-                            if(validation.equalsIgnoreCase("true") && !version.equalsIgnoreCase(currentVersion)){
-                                sessionManager.clearCacheData();
-                                UpdateAppDialog updateAppDialog = new UpdateAppDialog(mContext, new UpdateAppDialog.UpdateOnClickListnere() {
-                                    @Override
-                                    public void onClickUpdate(DialogInterface dialog) {
-                                        dialog.dismiss();
-                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID));
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        mContext.startActivity(intent);
-                                        ((Activity)mContext).finish();
-                                    }
+        new ApiServices(mContext).callWebServices(call, response -> {
+            try{
+                FeaturesModel modelVal = new Gson().fromJson(response,FeaturesModel.class);
+                if(modelVal.getResult()!=null) {
+                    boolean status = modelVal.getSuccess();
+                    if (status) {
+                        FeaturesModel.Values values = modelVal.getResult().getSetting().getValues();
+                        Log.e("values",new Gson().toJson(values));
+                        String validation = values.getMobileParentAppValidation();
+                        String version = values.getMobileAndroidParentAppVersion();
+                        validation = validation!=null ? validation :"";
+                        version = version!=null ? version:"";
+                        String currentVersion = String.valueOf(BuildConfig.VERSION_CODE);
+                        Log.e("versionCode", version + " ");
+                        if(validation.equalsIgnoreCase("true") && !version.equalsIgnoreCase(currentVersion)){
+                            sessionManager.clearCacheData();
+                            UpdateAppDialog updateAppDialog = new UpdateAppDialog(mContext, new UpdateAppDialog.UpdateOnClickListnere() {
+                                @Override
+                                public void onClickUpdate(DialogInterface dialog) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    mContext.startActivity(intent);
+                                    ((Activity)mContext).finish();
+                                }
 
-                                });
-                                updateAppDialog.showAlert();
-                            }else {
-                                doFurther();
-                            }
+                            });
+                            updateAppDialog.showAlert();
+                        }else {
+                            doFurther();
                         }
                     }
-
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
+
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
     }

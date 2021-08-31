@@ -70,12 +70,9 @@ public abstract class CommentsListAdapter<T> extends RecyclerView.Adapter{
             super(v);
             binding = DataBindingUtil.bind(v);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mClickListener!=null){
-                        mClickListener.onItemClick(v,getAdapterPosition());
-                    }
+            itemView.setOnClickListener(v1 -> {
+                if(mClickListener!=null){
+                    mClickListener.onItemClick(v1,getAdapterPosition());
                 }
             });
 

@@ -1,48 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <com.google.android.material.appbar.AppBarLayout
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            android:gravity="center"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp">
-            <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/white"
                 android:gravity="center"
-                android:layout_marginRight="?android:attr/actionBarSize"
-                android:layout_centerHorizontal="true">
-                <TextView
-                    android:id="@+id/textView"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:textAllCaps="true"
-                    android:text="@string/app_name"
-                    android:layout_gravity="center"
-                    android:textColor="@color/colorBlack"/>
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center">
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_toStartOf="@+id/iv_download"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:text="@string/app_name"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp" />
 
-        </androidx.appcompat.widget.Toolbar>
+                    <ImageView
+                        android:id="@+id/iv_download"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/download"
+                        android:contentDescription="@string/app_name"
+                        android:visibility="gone" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-</RelativeLayout>
+                    <ImageView
+                        android:id="@+id/iv_add"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/ic_add"
+                        android:contentDescription="@string/app_name"
+                        android:visibility="gone" />
+
+
+                </RelativeLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+    </RelativeLayout>
 </layout>

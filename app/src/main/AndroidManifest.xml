@@ -70,7 +70,8 @@
         <activity
             android:name=".activity.ChildProfileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustNothing"/>
 
         <activity
             android:name=".activity.MediaSliderActivity"
