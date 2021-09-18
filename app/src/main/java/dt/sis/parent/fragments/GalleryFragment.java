@@ -50,6 +50,7 @@ import dt.sis.parent.activity.ChildProfileActivity;
 import dt.sis.parent.activity.MediaSliderActivity;
 import dt.sis.parent.adapters.GalleryGroupListAdapter;
 import dt.sis.parent.adapters.GalleryGroupVerticalListAdapter;
+import dt.sis.parent.adapters.gallery.GalleryAdapter;
 import dt.sis.parent.databinding.FragGalleryBinding;
 import dt.sis.parent.databinding.FragProfileInfoBinding;
 import dt.sis.parent.helper.AppUtils;
@@ -57,8 +58,13 @@ import dt.sis.parent.helper.SessionManager;
 import dt.sis.parent.models.DashboardChildrenModel;
 import dt.sis.parent.models.GalleryDateGroupModel;
 import dt.sis.parent.models.GalleryGroupModel;
+import dt.sis.parent.models.gallery.GalleryResponse;
+import dt.sis.parent.models.gallery.Item;
+import dt.sis.parent.models.gallery.Result;
+import dt.sis.parent.models.student_comment.CommentStudentResponse;
 import dt.sis.parent.support.Constants;
 import dt.sis.parent.support.ProgressChangedListener;
+import dt.sis.parent.support.Utils;
 import dt.sis.parent.webservices.ApiClient;
 import dt.sis.parent.webservices.ApiServices;
 import dt.sis.parent.webservices.WebApis;
@@ -72,6 +78,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
     Context mContext;
     Activity mActivity;
     List<GalleryGroupModel.Result> arrayList = new ArrayList<>();
+    List<Result> listGallery = new ArrayList<>();
     TextView tvDownloadAll;
 
     public static GalleryFragment getInstance() {
@@ -116,21 +123,27 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
 
 
     private void getGalleryList(int studentId) {
+        binding.rvPhotos.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.VERTICAL, false));
         final String tenantId = sessionManager.getTenantId();
         Call<JsonObject> call = null;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);
         JsonObject postParam = new JsonObject();
-        call = webApis.getStudentGallery(studentId);
+        call = webApis.getStudentGalleryGrouping(studentId);
 
         ApiServices apiServices = new ApiServices(mContext);
         apiServices.callWebServices(call, response -> {
             try {
-                GalleryGroupModel modelVal = new Gson().fromJson(response, GalleryGroupModel.class);
-                boolean status = modelVal.getSuccess();
-                if (status) {
-                    arrayList.addAll(modelVal.getResult());
-                    FilterGalleryList filterGalleryList = new FilterGalleryList(arrayList);
-                    filterGalleryList.execute();
+                if (response != null && !response.equals("")) {
+                    GalleryResponse modelResponse = (GalleryResponse) Utils.getObject(response, GalleryResponse.class);
+                    if (modelResponse != null && modelResponse.getSuccess() != null && modelResponse.getSuccess()) {
+                        if (modelResponse.getResult() != null && modelResponse.getResult().size() > 0) {
+                            listGallery.clear();
+                            listGallery.addAll(modelResponse.getResult());
+                            binding.rvPhotos.setAdapter(new GalleryAdapter(mActivity, listGallery, this));
+                        }
+                    }
+                    /*FilterGalleryList filterGalleryList = new FilterGalleryList(arrayList);
+                    filterGalleryList.execute();*/
                 }
 
             } catch (Exception e) {
@@ -171,16 +184,18 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
 
     private void downloadAllImagesVideos() {
         tvDownloadAll.setEnabled(false);
-        if (arrayList != null && arrayList.size() > 0) {
-            for (int i = 0; i < arrayList.size(); i++) {
-                File myFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.app_name) + "/" + arrayList.get(i).getFileName());
-                if (!myFile.exists())
-                    downloadFile(getMediaUrl(arrayList.get(i).getMediaId()), arrayList.get(i).getFileName(), this, i);
+        if (listGallery != null && listGallery.size() > 0) {
+            for (int i = 0; i < listGallery.size(); i++) {
+                for (int j = 0; j < listGallery.get(i).getItems().size(); j++) {
+                    File myFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.app_name) + "/" + listGallery.get(i).getItems().get(j).getFileName());
+                    if (!myFile.exists())
+                        downloadFile(getMediaUrl(arrayList.get(i).getMediaId()), arrayList.get(i).getFileName(), this, i);
+                }
             }
         }
     }
 
-    private void downloadAccToDate(List<GalleryDateGroupModel.Result> galleryList, String date) {
+    private void downloadAccToDate(List<Item> galleryList, String date) {
         if (galleryList != null && galleryList.size() > 0) {
             for (int i = 0; i < galleryList.size(); i++) {
                 File myFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.app_name) + "/" + galleryList.get(i).getFileName());
@@ -193,6 +208,28 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
     private String getMediaUrl(String mediaId) {
         String tenantId = new SessionManager(mContext).getTenantId();
         return SessionManager.GALLERY_FILE_URL + "?mediaid=" + mediaId + "&Tenantid=" + tenantId;
+    }
+
+    public void downloadPermissionCheck(List<Item> galleryList, String date) {
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Permissions.check(mActivity, permissions, null, null, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
+                alertDialog.setTitle("Download");
+                alertDialog.setMessage("Press ok for download");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        (dialog, which) -> downloadAccToDate(galleryList, date));
+                alertDialog.show();
+
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                Toast.makeText(context, "permission denied", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void downloadFile(String uRl, String fileName, ProgressChangedListener progressChangeListener, int index) {
@@ -334,12 +371,12 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
                         Permissions.check(mActivity, permissions, null, null, new PermissionHandler() {
                             @Override
                             public void onGranted() {
-                                AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
+                                /*AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
                                 alertDialog.setTitle("Download");
                                 alertDialog.setMessage("Press ok for download");
                                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                                         (dialog, which) -> downloadAccToDate(galleryList, date));
-                                alertDialog.show();
+                                alertDialog.show();*/
 
                             }
 

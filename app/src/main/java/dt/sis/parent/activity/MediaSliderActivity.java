@@ -53,13 +53,14 @@ import dt.sis.parent.adapters.MediaSliderAdapter;
 import dt.sis.parent.databinding.ActivityMediaSliderBinding;
 import dt.sis.parent.helper.SessionManager;
 import dt.sis.parent.models.GalleryGroupModel;
+import dt.sis.parent.models.gallery.Item;
 
 public class MediaSliderActivity extends AppCompatActivity {
 
     ActivityMediaSliderBinding binding ;
     Context mContext;
     SessionManager sessionManager;
-    List<GalleryGroupModel.Result> galleryList;
+    List<Item> galleryList;
     private String imagesList;
     int selectedPage = 0;
     private static final int REQUEST_WRITE_PERMISSION = 99;
@@ -88,18 +89,18 @@ public class MediaSliderActivity extends AppCompatActivity {
 
         Log.e("ImagesLIST",imagesList);
 
-        galleryList = new Gson().fromJson(imagesList, new TypeToken<List<GalleryGroupModel.Result>>(){}.getType());
+        galleryList = new Gson().fromJson(imagesList, new TypeToken<List<Item>>(){}.getType());
 
         final String tenantId = sessionManager.getTenantId();
-        MediaSliderAdapter<GalleryGroupModel.Result> mediaSliderAdapter = new MediaSliderAdapter<GalleryGroupModel.Result>(mContext,galleryList) {
+        MediaSliderAdapter<Item> mediaSliderAdapter = new MediaSliderAdapter<Item>(mContext,galleryList) {
             @Override
-            public String getFilePath(int position, GalleryGroupModel.Result result) {
+            public String getFilePath(int position, Item result) {
                 String value = sessionManager.GALLERY_FILE_URL+"?mediaid=" + result.getMediaId() +"&Tenantid="+tenantId;;
                 return value;
             }
 
             @Override
-            public String getFileExtension(int position, GalleryGroupModel.Result result) {
+            public String getFileExtension(int position, Item result) {
                 String value = result.getFileExtension();
 
                 return value;

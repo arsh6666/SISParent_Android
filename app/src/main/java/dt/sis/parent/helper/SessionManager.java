@@ -54,7 +54,7 @@ public class SessionManager {
     private static final String FIREBASE_TOKEN  = "FIREBASE_TOKEN";
     private static final String FEATURES_MODEL  = "FEATURES_MODEL";
 
-    public static final String BASE_URL = "http://86.96.201.117:8080/";
+    public static final String BASE_URL = "http://86.96.201.117:8080/"; // live
 //    public static final String IMAGE_FILE_URL = BASE_URL + "file/getstudentimage";
     public static final String IMAGE_FILE_URL = BASE_URL + "file/GetImageByPictureId";
     public static final String GALLERY_FILE_URL = BASE_URL + "Gallery/Getmediafile";

@@ -83,11 +83,8 @@ public class AppUtils {
     }
     public static String getDate(String inputDateStr) {
         String substr=inputDateStr.substring(0,inputDateStr.indexOf("T"));
-//        Log.e("substringDate",substr);
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
-//        inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.getDefault());
-//        outputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
         try {
             date = inputFormat.parse(substr);

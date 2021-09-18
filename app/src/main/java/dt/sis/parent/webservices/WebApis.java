@@ -85,6 +85,11 @@ public interface WebApis {
             @Query("studentId") int studentId
     );
 
+    @GET("api/services/app/Gallery/GetMediaForStudentWithGrouping")
+    Call<JsonObject> getStudentGalleryGrouping(
+            @Query("studentId") int studentId
+    );
+
     @Multipart
     @POST("Profile/UploadProfilePicture")
     Call<JsonObject> uploadProfilePicture(@Part List<MultipartBody.Part> surveyImage);
