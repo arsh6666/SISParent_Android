@@ -94,6 +94,7 @@ public interface WebApis {
     @POST("Profile/UploadProfilePicture")
     Call<JsonObject> uploadProfilePicture(@Part List<MultipartBody.Part> surveyImage);
 
+
     @PUT("api/services/app/Profile/UpdateProfilePicture")
     Call<JsonObject> updateProfilePicture(@Body JsonObject jsonParams);
 
