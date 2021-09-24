@@ -84,7 +84,10 @@ public class AttendanceFragment extends Fragment {
         sessionManager = new SessionManager(mContext);
 
         dateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault());
+        return mView;
+    }
 
+    public void setData(){
         if(getArguments()!=null)
             children_list = getArguments().getString("children_list");
 
@@ -100,8 +103,6 @@ public class AttendanceFragment extends Fragment {
         }
 
         setCalenderSetup();
-
-        return mView;
     }
 
     private void setCalenderSetup() {

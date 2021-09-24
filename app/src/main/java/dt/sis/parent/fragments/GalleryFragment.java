@@ -44,6 +44,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import dt.sis.parent.R;
 import dt.sis.parent.activity.ChildProfileActivity;
@@ -80,9 +81,12 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
     List<GalleryGroupModel.Result> arrayList = new ArrayList<>();
     List<Result> listGallery = new ArrayList<>();
     TextView tvDownloadAll;
+    static GalleryFragment fragment;
 
     public static GalleryFragment getInstance() {
-        return new GalleryFragment();
+        if (fragment == null)
+            return new GalleryFragment();
+        else return fragment;
     }
 
     @Override
@@ -104,9 +108,19 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
         mContext = getActivity();
         mActivity = getActivity();
         sessionManager = new SessionManager(mContext);
-        if (getArguments() != null)
+        String fetchData = "";
+        if (getArguments() != null) {
             children_list = getArguments().getString("children_list");
+            fetchData = getArguments().getString("fetch_data");
+        }
 
+
+        tvDownloadAll = mView.findViewById(R.id.tv_download);
+        tvDownloadAll.setOnClickListener(this);
+        return mView;
+    }
+
+    public void getData() {
         if (children_list != null) {
             Log.e("ChildrenList", children_list + " ");
             DashboardChildrenModel.Students childrenModel = new Gson().fromJson(children_list, new TypeToken<DashboardChildrenModel.Students>() {
@@ -115,12 +129,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener, P
 
             getGalleryList(studentId);
         }
-
-        tvDownloadAll = mView.findViewById(R.id.tv_download);
-        tvDownloadAll.setOnClickListener(this);
-        return mView;
     }
-
 
     private void getGalleryList(int studentId) {
         binding.rvPhotos.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.VERTICAL, false));

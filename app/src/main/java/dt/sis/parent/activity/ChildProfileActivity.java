@@ -99,12 +99,22 @@ public class ChildProfileActivity extends AppCompatActivity {
             binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    if (Objects.equals(tab.getText(), "Gallery")) {
+                    if (Objects.equals(tab.getText(), GALLLERY)) {
                         visibleDownloadButton("visible");
                         visibleAddButton("gone");
-                    } else if (Objects.equals(tab.getText(), "Comment")) {
+                        Constants.galleryFragment.getData();
+                    } else if (Objects.equals(tab.getText(), COMMENT)) {
                         visibleAddButton("visible");
                         visibleDownloadButton("gone");
+                        Constants.commentsFragment.getCommentList();
+                    } else if (Objects.equals(tab.getText(), HEALTH)) {
+                        visibleDownloadButton("gone");
+                        visibleAddButton("gone");
+                        Constants.healthFragment.setData();
+                    } else if (Objects.equals(tab.getText(), ATTENDANCE)) {
+                        visibleDownloadButton("gone");
+                        visibleAddButton("gone");
+                        Constants.attendanceFragment.setData();
                     } else {
                         visibleDownloadButton("gone");
                         visibleAddButton("gone");

@@ -79,12 +79,10 @@ public class CommentsFragment extends Fragment {
         View mView = binding.getRoot();
         mContext = getActivity();
         sessionManager = new SessionManager(mContext);
-        getCommentList();
-
         return mView;
     }
 
-    private void getCommentList() {
+    public void getCommentList() {
 
         Call<JsonObject> call;
         WebApis webApis = ApiClient.getClient(mContext).create(WebApis.class);

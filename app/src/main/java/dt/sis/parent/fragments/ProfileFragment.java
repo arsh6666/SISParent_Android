@@ -55,8 +55,9 @@ public class ProfileFragment extends Fragment {
         View mView = binding.getRoot();
         mContext = getActivity();
         sessionManager = new SessionManager(mContext);
-        if (getArguments() != null)
+        if (getArguments() != null) {
             children_list = getArguments().getString("children_list");
+        }
 
         if (children_list != null) {
             Log.e("ChildrenList", children_list + " ");

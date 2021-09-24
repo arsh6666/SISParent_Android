@@ -84,7 +84,10 @@ public class HealthFragment extends Fragment {
         sessionManager = new SessionManager(mContext);
 
         dateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault());
+        return mView;
+    }
 
+    public void setData(){
         setHealthTabHeader();
         setHabitTypeAdapter();
 
@@ -109,10 +112,8 @@ public class HealthFragment extends Fragment {
         }
 
         setCalenderView();
-
-
-        return mView;
     }
+
     private  void selectDatePicker(){
         try {
             final Calendar c = Calendar.getInstance();

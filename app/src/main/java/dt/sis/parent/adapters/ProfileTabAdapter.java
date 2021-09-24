@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Lifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,12 @@ public class ProfileTabAdapter extends FragmentPagerAdapter {
     List<String> tabTitles;
     String children_list;
     Activity context;
+    FragmentManager fragmentManager;
 
     public ProfileTabAdapter(FragmentManager fm, String children_list, List<String> tabTitles, Activity context) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.children_list = children_list;
+        fragmentManager = fm;
         this.tabTitles = tabTitles;
         this.context = context;
     }
@@ -45,6 +48,7 @@ public class ProfileTabAdapter extends FragmentPagerAdapter {
                     Bundle bundle = new Bundle();
                     bundle.putString("children_list", children_list);
                     fragment.setArguments(bundle);
+                    fragmentManager.beginTransaction().setMaxLifecycle(fragment, Lifecycle.State.STARTED);
                     return fragment;
 
                 case ChildProfileActivity.GALLLERY:
@@ -58,25 +62,38 @@ public class ProfileTabAdapter extends FragmentPagerAdapter {
                     return fragment;
 
                 case ChildProfileActivity.COMMENT:
-                    fragment = CommentsFragment.getInstance();
+                    if (Constants.commentsFragment == null) {
+                        Constants.commentsFragment = CommentsFragment.getInstance();
+                        fragment = Constants.commentsFragment;
+                    } else fragment = Constants.commentsFragment;
                     return fragment;
 
                 case ChildProfileActivity.HEALTH:
-                    fragment = HealthFragment.getInstance();
+                    if (Constants.healthFragment == null) {
+                        Constants.healthFragment = HealthFragment.getInstance();
+                        fragment = Constants.healthFragment;
+                    } else fragment = Constants.healthFragment;
                     bundle = new Bundle();
                     bundle.putString("children_list", children_list);
                     fragment.setArguments(bundle);
                     return fragment;
 
                 case ChildProfileActivity.ATTENDANCE:
-                    fragment = AttendanceFragment.getInstance();
+                    if (Constants.attendanceFragment == null) {
+                        Constants.attendanceFragment = AttendanceFragment.getInstance();
+                        fragment = Constants.attendanceFragment;
+                    } else fragment = Constants.attendanceFragment;
                     bundle = new Bundle();
                     bundle.putString("children_list", children_list);
                     fragment.setArguments(bundle);
                     return fragment;
 
                 default:
-                    return CommentsFragment.getInstance();
+                    if (Constants.commentsFragment == null) {
+                        Constants.commentsFragment = CommentsFragment.getInstance();
+                        fragment = Constants.commentsFragment;
+                    } else fragment = Constants.commentsFragment;
+                    return fragment;
             }
         } catch (Exception e) {
             e.printStackTrace();
